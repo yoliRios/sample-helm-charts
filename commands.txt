@@ -1,0 +1,63 @@
+## Some basic exercise for Helm
+https://github.com/techpodium/local-k3s/tree/master/sample-helm-charts
+
+## Generate K8s manifest using helm charts:
+`helm template -g --output-dir ./ymls . -f stage/values.yaml -f stage/secrets.yaml`
+
+wordpress-stack comes from Charts.yaml file
+-f - the location of the values.yaml file
+-g - generate K8s manifest files
+
+
+## Managing Secrets in Helm Charts
+- Install helm secret plugin
+```
+helm plugin install https://github.com/jkroepke/helm-secrets --version v4.5.1
+```
+
+- If you want to install lates version:
+```
+helm plugin install https://github.com/jkroepke/helm-secrets
+
+
+## Installing the deployment
+```
+helm install wordpress-db -n wpdb . -f dev/values.yaml -f dev/secrets.yaml --create-namespace
+
+Change directory to wp
+helm install wordpress-app -n wpapp . -f dev/values.yaml -f dev/secrets.yaml --create-namespace
+
+## Upgrading the deployment
+helm upgrade wordpress-app -n wpapp . -f dev/values.yaml -f dev/secrets.yaml
+
+## this will list all the helm deployments in all namespaces
+helm ls -A
+
+## delete the deployment
+helm uninstall wordpress-db -n wpdb
+
+## Decrypting the secrets file
+sops -d dev/secrets.enc.yaml > dev/secrets.yaml
+
+## List the deployments in a namespace
+helm ls -n wpdb
+
+## Encrypting the secrets file
+- note: set the correct area to encrypt within the file
+ sops -e dev/secrets.yaml > dev/secrets.enc.yaml
+
+
+## running with encryptes secrets
+helm secrets install wordpress-db -n wpdb . -f dev/values.yaml -f dev/secrets.enc.yaml --create-namespace
+
+helm secrets install wordpress-app -n wpapp . -f dev/values.yaml -f dev/secrets.enc.yaml --create-namespace
+
+to set if env variable is not set:
+    1 - login to the pod (kubectl exec -it podname -n namespace -- /bin/bash)
+    2 - echo $WORDPRESS_DB_PASSWORD
+
+kubectl port-foward service/wpapp -n wpapp 8082:80
+-- Set kubernetes context
+kubectl config use-context rancher-desktop
+
+Add decrypted file to gitignore

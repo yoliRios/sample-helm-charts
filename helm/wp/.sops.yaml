@@ -1,0 +1,5 @@
+creation_rules:
+  - gcp_kms: projects/myfirstapp-72240/locations/northamerica-northeast1/keyRings/keyring-01/cryptoKeys/my-key
+    # Specify any file patterns you want to auto-encrypt
+    path_regex: '.*\.yaml$'
+    encrypted_regex: '^(secrets)$'
