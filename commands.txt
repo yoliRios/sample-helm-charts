@@ -56,8 +56,22 @@ to set if env variable is not set:
     1 - login to the pod (kubectl exec -it podname -n namespace -- /bin/bash)
     2 - echo $WORDPRESS_DB_PASSWORD
 
-kubectl port-foward service/wpapp -n wpapp 8082:80
+kubectl port-forward service/wpapp -n wpapp 8082:80
 -- Set kubernetes context
+kubectl config get-contexts
+kubectl config current-context
+kubectl config use-context <context-name>
+
 kubectl config use-context rancher-desktop
 
 Add decrypted file to gitignore
+
+-- ArgoCD
+kubectl create namespace argocd
+kubectl apply -n argocd -f  https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+kubectl get all -n argocd
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+
+kubectl port-forward service/argocd-server 8081:80 -n argocd
+-- Argo password
+GA537u-5d07y2Z9c
