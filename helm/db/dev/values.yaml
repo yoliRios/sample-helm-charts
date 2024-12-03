@@ -7,7 +7,7 @@ db:
   image:
     repository: mariadb
     tag: "10.6.4-focal"
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
   replicas: 1
   configmap:
     ## KEY: "value"
