@@ -7,8 +7,8 @@ db:
   image:
     repository: mariadb
     tag: "10.6.4-focal"
-    pullPolicy: Always
-  replicas: 1
+    pullPolicy: IfNotPresent
+  replicas: 3
   configmap:
     ## KEY: "value"
     MYSQL_DATABASE: wordpress
